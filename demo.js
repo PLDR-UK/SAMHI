@@ -26,4 +26,25 @@ $.getJSON('./crimes_by_district.geojson', function (geojson) {
           feature.properties.incidents.toLocaleString() + ' incidents')
     }
   }).addTo(map)
+
+  // Add legend (don't forget to add the CSS from index.html)
+  var legend = L.control({ position: 'bottomright' })
+  legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend')
+    var limits = choroplethLayer.options.limits
+    var colors = choroplethLayer.options.colors
+    var labels = []
+
+    // Add min & max
+    div.innerHTML = '<div class="labels"><div class="min">' + limits[0] + '</div> \
+			<div class="max">' + limits[limits.length - 1] + '</div></div>'
+
+    limits.forEach(function (limit, index) {
+      labels.push('<li style="background-color: ' + colors[index] + '"></li>')
+    })
+
+    div.innerHTML += '<ul>' + labels.join('') + '</ul>'
+    return div
+  }
+  legend.addTo(map)
 })
