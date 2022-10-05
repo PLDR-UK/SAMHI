@@ -1,7 +1,7 @@
 var map = L.map('map').setView([39.9897471840457, -75.13893127441406], 11)
 
 // Add basemap
-L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
+var layer_OSM = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	subdomains: 'abcd',
 	minZoom: 0,
@@ -11,22 +11,22 @@ L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext
 
 // Add GeoJSON
 $.getJSON('./crimes_by_district.geojson', function (geojson) {
-  L.choropleth(geojson, {
+  var choroplethLayer = L.choropleth(geojson, {
     valueProperty: 'incidents',
-    scale: ['white', 'red'],
-    steps: 5,
+    scale: ['blue','yellow', 'red'],
+    steps: 10,
     mode: 'q',
     style: {
       color: '#fff',
-      weight: 2,
-      fillOpacity: 0.8
+      weight: 1,
+      fillOpacity: 0.6
     },
     onEachFeature: function (feature, layer) {
       layer.bindPopup('District ' + feature.properties.dist_num + '<br>' +
           feature.properties.incidents.toLocaleString() + ' incidents')
     }
   }).addTo(map)
-
+  
   // Add legend (don't forget to add the CSS from index.html)
   var legend = L.control({ position: 'bottomright' })
   legend.onAdd = function (map) {
@@ -47,4 +47,15 @@ $.getJSON('./crimes_by_district.geojson', function (geojson) {
     return div
   }
   legend.addTo(map)
+
+  var layers = {
+    'OpenStreetMap': layer_OSM,
+    'Test': choroplethLayer
+};
+
+var layersControl = L.control.layers({},
+    layers,
+    { collapsed: false }).addTo(map);
 })
+
+
