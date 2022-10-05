@@ -5,6 +5,14 @@
 		<title>Leaflet Choropleth</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css">
         <style type="text/css">
+            html, body {
+                height: 100%;
+            }
+
+            #map {
+                height: 100%;
+                background: #000;
+            }
             .legend {
                 color: #555;
                 padding: 6px 8px;
@@ -36,7 +44,7 @@
         </style>
 	</head>
 	<body>
-		<div id="map" style="height: 800px"></div>
+		<div id="map" style="height: 100%"></div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
 		<script src="lib/choropleth.js"></script>
