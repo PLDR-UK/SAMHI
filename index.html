@@ -3,8 +3,10 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Leaflet Choropleth</title>
+        <script type="application/javascript">document.interestCohort = null;</script>        
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css">
         <style type="text/css">
+            #map { position: absolute; top:0; bottom:0; right:0; left:0; }
             .legend {
                 color: #555;
                 padding: 6px 8px;
@@ -36,9 +38,11 @@
         </style>
 	</head>
 	<body>
-		<div id="map" style="height: 900px"></div>
+		<div id="map" style="height: 100%"></div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
+        <script src="lib/spin.min.js" charset="utf-8"></script>
+        <script src="lib/leaflet.spin.min.js" charset="utf-8"></script>
 		<script src="lib/choropleth.js"></script>
 		<script src="demo.js"></script>
 	</body>
