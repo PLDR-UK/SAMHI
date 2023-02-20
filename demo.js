@@ -1,24 +1,20 @@
 var map = L.map('map').setView([52.735044,-1.420020], 7)
 
 // Add basemap
-var layer_OSM = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+var layer_OSM = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
-	minZoom: 0,
-	maxZoom: 20,
-	ext: 'png'
+	maxZoom: 20
 }).addTo(map)
 
 map.createPane('labels');
 map.getPane('labels').style.zIndex = 550;
 map.getPane('labels').style.pointerEvents = 'none';
 
-var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-labels/{z}/{x}/{y}{r}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+var stamenLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
-	minZoom: 0,
 	maxZoom: 20,
-	ext: 'png',
   pane: 'labels'
 }).addTo(map)
 
@@ -38,8 +34,20 @@ $.getJSON('./data/samhi_simple.json', function (geojson) {
     onEachFeature: function (feature, layer) {
       layer.bindPopup(' SAMHI Index 2019' + '<br>' +
                       '<hr>' +
-                      'Decile: ' + feature.properties.dec_2019 + '<br>' +
-                      'Z score:' + feature.properties.index_2019.toLocaleString())
+                      '<table>' +
+                      '<tr style="background-color: #c0c8c0">' +
+                        '<td>LSOA Code </td>' +
+                        '<td>' + feature.properties.lsoa11 + '</td>' +
+                      '</tr>' +
+                      '<tr>' +
+                        '<td>Decile </td>' +
+                        '<td>' + feature.properties.dec_2019 + '</td>' +
+                      '</tr>' +
+                      '<tr style="background-color: #c0c8c0">' +
+                        '<td>Z score </td>' +
+                        '<td>' + feature.properties.index_2019.toLocaleString() +
+                      '</tr>' +
+                      '</table>')
     }
   }).addTo(map)
   map.spin(false);
@@ -65,6 +73,16 @@ $.getJSON('./data/samhi_simple.json', function (geojson) {
     return div
   }
   legend.addTo(map)
+
+    // Add mtitle (don't forget to add the CSS from index.html)
+    var mtitle = L.control({ position: 'topleft' })
+    mtitle.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'info map title')
+      var labels = []
+      div.innerHTML = '<div class="mtitle"> Small Area Mental Health Index (SAMHI) </div>'
+      return div
+    }
+    mtitle.addTo(map)
 
   var layers = {
     'OpenStreetMap': layer_OSM,
